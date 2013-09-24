@@ -272,6 +272,10 @@ static void batadv_send_outstanding_bcast_packet(struct work_struct *work)
 		if (forw_packet->num_packets >= hard_iface->num_bcasts)
 			continue;
 
+		if (atomic_read(&hard_iface->no_rebroadcast) &&
+		    forw_packet->skb->dev == hard_iface->net_dev)
+			continue;
+
 		/* send a copy of the saved skb */
 		skb1 = skb_clone(forw_packet->skb, GFP_ATOMIC);
 		if (skb1)

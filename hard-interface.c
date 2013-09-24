@@ -600,6 +600,8 @@ batadv_hardif_add_interface(struct net_device *net_dev)
 	/* extra reference for return */
 	atomic_set(&hard_iface->refcount, 2);
 
+	atomic_set(&hard_iface->no_rebroadcast, 0);
+
 	batadv_check_known_mac_addr(hard_iface->net_dev);
 	list_add_tail_rcu(&hard_iface->list, &batadv_hardif_list);
 

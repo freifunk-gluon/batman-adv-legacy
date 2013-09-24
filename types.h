@@ -85,6 +85,7 @@ struct batadv_hard_iface {
 	struct rcu_head rcu;
 	struct batadv_hard_iface_bat_iv bat_iv;
 	struct work_struct cleanup_work;
+	atomic_t no_rebroadcast;
 };
 
 /**
