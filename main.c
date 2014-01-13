@@ -32,7 +32,6 @@
 #include "gateway_client.h"
 #include "bridge_loop_avoidance.h"
 #include "distributed-arp-table.h"
-#include "vis.h"
 #include "hash.h"
 #include "bat_algo.h"
 #include "network-coding.h"
@@ -106,8 +105,6 @@ int batadv_mesh_init(struct net_device *soft_iface)
 	spin_lock_init(&bat_priv->tt.roam_list_lock);
 	spin_lock_init(&bat_priv->tt.last_changeset_lock);
 	spin_lock_init(&bat_priv->gw.list_lock);
-	spin_lock_init(&bat_priv->vis.hash_lock);
-	spin_lock_init(&bat_priv->vis.list_lock);
 
 	INIT_HLIST_HEAD(&bat_priv->forw_bat_list);
 	INIT_HLIST_HEAD(&bat_priv->forw_bcast_list);
@@ -126,10 +123,6 @@ int batadv_mesh_init(struct net_device *soft_iface)
 
 	batadv_tt_local_add(soft_iface, soft_iface->dev_addr,
 			    BATADV_NULL_IFINDEX);
-
-	ret = batadv_vis_init(bat_priv);
-	if (ret < 0)
-		goto err;
 
 	ret = batadv_bla_init(bat_priv);
 	if (ret < 0)
@@ -160,8 +153,6 @@ void batadv_mesh_free(struct net_device *soft_iface)
 	atomic_set(&bat_priv->mesh_state, BATADV_MESH_DEACTIVATING);
 
 	batadv_purge_outstanding_packets(bat_priv, NULL);
-
-	batadv_vis_quit(bat_priv);
 
 	batadv_gw_node_purge(bat_priv);
 	batadv_nc_mesh_free(bat_priv);

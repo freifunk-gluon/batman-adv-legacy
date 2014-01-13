@@ -687,11 +687,10 @@ static void batadv_iv_ogm_schedule(struct batadv_hard_iface *hard_iface)
 	struct batadv_ogm_packet *batadv_ogm_packet;
 	struct batadv_hard_iface *primary_if;
 	int *ogm_buff_len = &hard_iface->bat_iv.ogm_buff_len;
-	int vis_server, tt_num_changes = 0;
+	int tt_num_changes = 0;
 	uint32_t seqno;
 	uint8_t bandwidth;
 
-	vis_server = atomic_read(&bat_priv->vis_mode);
 	primary_if = batadv_primary_if_get_selected(bat_priv);
 
 	if (hard_iface == primary_if)
@@ -711,10 +710,7 @@ static void batadv_iv_ogm_schedule(struct batadv_hard_iface *hard_iface)
 	if (tt_num_changes >= 0)
 		batadv_ogm_packet->tt_num_changes = tt_num_changes;
 
-	if (vis_server == BATADV_VIS_TYPE_SERVER_SYNC)
-		batadv_ogm_packet->flags |= BATADV_VIS_SERVER;
-	else
-		batadv_ogm_packet->flags &= ~BATADV_VIS_SERVER;
+	batadv_ogm_packet->flags = 0;
 
 	if (hard_iface == primary_if &&
 	    atomic_read(&bat_priv->gw_mode) == BATADV_GW_MODE_SERVER) {

@@ -25,7 +25,6 @@
 #include "icmp_socket.h"
 #include "translation-table.h"
 #include "originator.h"
-#include "vis.h"
 #include "unicast.h"
 #include "bridge_loop_avoidance.h"
 #include "distributed-arp-table.h"
@@ -1229,46 +1228,76 @@ int batadv_recv_vis_packet(struct sk_buff *skb,
 	struct batadv_vis_packet *vis_packet;
 	struct ethhdr *ethhdr;
 	struct batadv_priv *bat_priv = netdev_priv(recv_if->soft_iface);
+	struct batadv_orig_node *orig_node = NULL;
+	struct batadv_hard_iface *primary_if = NULL;
+	int res, ret = NET_RX_DROP;
 	int hdr_size = sizeof(*vis_packet);
+
+	primary_if = batadv_primary_if_get_selected(bat_priv);
+	if (!primary_if)
+		goto out;
 
 	/* keep skb linear */
 	if (skb_linearize(skb) < 0)
-		return NET_RX_DROP;
+		goto out;
 
 	if (unlikely(!pskb_may_pull(skb, hdr_size)))
-		return NET_RX_DROP;
+		goto out;
 
 	vis_packet = (struct batadv_vis_packet *)skb->data;
 	ethhdr = eth_hdr(skb);
 
 	/* not for me */
 	if (!batadv_is_my_mac(bat_priv, ethhdr->h_dest))
-		return NET_RX_DROP;
+		goto out;
 
 	/* ignore own packets */
 	if (batadv_is_my_mac(bat_priv, vis_packet->vis_orig))
-		return NET_RX_DROP;
+		goto out;
 
 	if (batadv_is_my_mac(bat_priv, vis_packet->sender_orig))
-		return NET_RX_DROP;
+		goto out;
 
-	switch (vis_packet->vis_type) {
-	case BATADV_VIS_TYPE_SERVER_SYNC:
-		batadv_receive_server_sync_packet(bat_priv, vis_packet,
-						  skb_headlen(skb));
-		break;
+	/* for me?? */
+	if (batadv_is_my_mac(bat_priv, vis_packet->target_orig))
+		goto out;
 
-	case BATADV_VIS_TYPE_CLIENT_UPDATE:
-		batadv_receive_client_update_packet(bat_priv, vis_packet,
-						    skb_headlen(skb));
-		break;
-
-	default:	/* ignore unknown packet */
-		break;
+	/* TTL exceeded */
+	if (vis_packet->header.ttl < 2) {
+		pr_debug("Warning - can't forward vis packet from %pM to %pM: ttl exceeded\n",
+			 ethhdr->h_source, vis_packet->target_orig);
+		goto out;
 	}
 
-	/* We take a copy of the data in the packet, so we should
-	 * always free the skbuf.
-	 */
-	return NET_RX_DROP;
+	/* get routing information */
+	orig_node = batadv_orig_hash_find(bat_priv, vis_packet->target_orig);
+
+	if (!orig_node)
+		goto out;
+
+	/* create a copy of the skb, if needed, to modify it. */
+	if (skb_cow(skb, ETH_HLEN) < 0)
+		goto out;
+
+	vis_packet = (struct batadv_vis_packet *)skb->data;
+
+	/* decrement ttl */
+	vis_packet->header.ttl--;
+
+	memcpy(vis_packet->sender_orig, primary_if->net_dev->dev_addr, ETH_ALEN);
+
+	res = batadv_send_skb_to_orig(skb, orig_node, recv_if);
+
+	/* translate transmit result into receive result */
+	if (res == NET_XMIT_SUCCESS)
+		ret = NET_RX_SUCCESS;
+
+out:
+	if (orig_node)
+		batadv_orig_node_free_ref(orig_node);
+
+	if (primary_if)
+		batadv_hardif_free_ref(primary_if);
+
+	return ret;
 }
