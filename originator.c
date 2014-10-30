@@ -254,6 +254,7 @@ struct batadv_orig_node *batadv_get_orig_node(struct batadv_priv *bat_priv,
 	orig_node->tt_buff = NULL;
 	orig_node->tt_buff_len = 0;
 	atomic_set(&orig_node->tt_size, 0);
+	orig_node->last_seen = jiffies;
 	reset_time = jiffies - 1 - msecs_to_jiffies(BATADV_RESET_PROTECTION_MS);
 	orig_node->bcast_seqno_reset = reset_time;
 	orig_node->batman_seqno_reset = reset_time;
