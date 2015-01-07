@@ -392,7 +392,7 @@ static void _batadv_purge_orig(struct batadv_priv *bat_priv)
 							      orig_node);
 				hlist_del_rcu(&orig_node->hash_entry);
 				batadv_tt_global_del_orig(orig_node->bat_priv,
-							  orig_node, -1,
+							  orig_node,
 							  "originator timed out");
 				batadv_orig_node_free_ref(orig_node);
 				continue;
