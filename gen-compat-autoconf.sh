@@ -5,7 +5,8 @@ set -e
 TARGET=${1:="compat-autoconf.h"}
 TMP="${TARGET}.tmp"
 
-echo -n > "${TMP}"
+rm -f "${TMP}"
+touch "${TMP}"
 
 gen_config() {
 	KEY="${1}"
