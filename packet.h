@@ -53,6 +53,7 @@ enum batadv_subtype {
 enum batadv_iv_flags {
 	BATADV_NOT_BEST_NEXT_HOP   = BIT(3),
 	BATADV_PRIMARIES_FIRST_HOP = BIT(4),
+	BATADV_VIS_SERVER	   = BIT(5),
 	BATADV_DIRECTLINK	   = BIT(6),
 };
 
@@ -63,6 +64,12 @@ enum batadv_icmp_packettype {
 	BATADV_ECHO_REQUEST	       = 8,
 	BATADV_TTL_EXCEEDED	       = 11,
 	BATADV_PARAMETER_PROBLEM       = 12,
+};
+
+/* vis defines */
+enum batadv_vis_packettype {
+	BATADV_VIS_TYPE_SERVER_SYNC   = 0,
+	BATADV_VIS_TYPE_CLIENT_UPDATE = 1,
 };
 
 /* fragmentation defines */
@@ -126,7 +133,7 @@ struct batadv_header {
 
 struct batadv_ogm_packet {
 	struct batadv_header header;
-	uint8_t  flags;    /* 0x40: DIRECTLINK flag... */
+	uint8_t  flags;    /* 0x40: DIRECTLINK flag, 0x20 VIS_SERVER flag... */
 	__be32   seqno;
 	uint8_t  orig[ETH_ALEN];
 	uint8_t  prev_sender[ETH_ALEN];
