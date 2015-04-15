@@ -450,16 +450,17 @@ static int batadv_write_buffer_text(struct batadv_priv *bat_priv,
 
 	curr_gw = batadv_gw_get_selected_gw_node(bat_priv);
 
-	ret = seq_printf(seq, "%s %pM (%3i) %pM [%10s]: %3i - %i%s/%i%s\n",
-			 (curr_gw == gw_node ? "=>" : "  "),
-			 gw_node->orig_node->orig,
-			 router->tq_avg, router->addr,
-			 router->if_incoming->net_dev->name,
-			 gw_node->orig_node->gw_flags,
-			 (down > 2048 ? down / 1024 : down),
-			 (down > 2048 ? "MBit" : "KBit"),
-			 (up > 2048 ? up / 1024 : up),
-			 (up > 2048 ? "MBit" : "KBit"));
+	seq_printf(seq, "%s %pM (%3i) %pM [%10s]: %3i - %i%s/%i%s\n",
+		   (curr_gw == gw_node ? "=>" : "  "),
+		   gw_node->orig_node->orig,
+		   router->tq_avg, router->addr,
+		   router->if_incoming->net_dev->name,
+		   gw_node->orig_node->gw_flags,
+		   (down > 2048 ? down / 1024 : down),
+		   (down > 2048 ? "MBit" : "KBit"),
+		   (up > 2048 ? up / 1024 : up),
+		   (up > 2048 ? "MBit" : "KBit"));
+	ret = seq_has_overflowed(seq) ? -1 : 0;
 
 	batadv_neigh_node_free_ref(router);
 	if (curr_gw)
