@@ -1,3 +1,34 @@
+BATMAN-ADV-LEGACY
+-----------------
+
+This is the batman-adv "legacy" version (compat-level 14). Use it
+if you have a mesh using compat 14 which can't be easily upgraded
+to  a newer version of batman-adv. If you are building a new mesh
+network, you should consider the current upstream version,  which
+can be found under
+
+http://www.open-mesh.org/projects/batman-adv/wiki
+
+Please  don't  bother the upstream batman-adv developers with bug
+reports if you are using batman-adv-legacy. The batman-adv-legacy
+maintainers can be found at the bottom of this README.
+
+BRANCHES
+--------
+
+There are currently two branches in this repository:
+
+* master
+* legacy-vis
+
+The in-kernel mesh visualization support ("vis_mode" option) has
+been  removed  from  the master branch, so a userspace tool like
+alfred has to be used. If you still require "vis_mode", you  can
+use the legacy-vis branch.
+
+These branches might be merged in the future to allow "vis_mode"
+to be enabled or disabled at runtime.
+
 BATMAN-ADV
 ----------
 
@@ -237,13 +268,12 @@ batctl is available on http://www.open-mesh.org/
 CONTACT
 -------
 
-Please send us comments, experiences, questions, anything :)
+batman-adv-legacy  is  maintained  by the developers of the Gluon
+firmware framework (see https://github.com/freifunk-gluon/gluon).
 
-IRC:            #batman   on   irc.freenode.org
-Mailing-list:   b.a.t.m.a.n@open-mesh.org (optional  subscription
-          at https://lists.open-mesh.org/mm/listinfo/b.a.t.m.a.n)
+You  can find us on IRC: (channel #gluon on irc.hackint.org, look
+for neoraider)
 
-You can also contact the Authors:
+Bug reports can also be sent via mail to:
 
-Marek  Lindner  <lindner_marek@yahoo.de>
-Simon  Wunderlich  <siwu@hrz.tu-chemnitz.de>
+Matthias Schiffer <mschiffer@universe-factory.net>
