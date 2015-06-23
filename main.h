@@ -22,8 +22,8 @@
 
 #define BATADV_DRIVER_AUTHOR "Marek Lindner <lindner_marek@yahoo.de>, " \
 			     "Simon Wunderlich <siwu@hrz.tu-chemnitz.de>"
-#define BATADV_DRIVER_DESC   "B.A.T.M.A.N. advanced"
-#define BATADV_DRIVER_DEVICE "batman-adv"
+#define BATADV_DRIVER_DESC   "B.A.T.M.A.N. advanced legacy (compat14)"
+#define BATADV_DRIVER_DEVICE "batman-adv-legacy"
 
 #ifndef BATADV_SOURCE_VERSION
 #define BATADV_SOURCE_VERSION "2013.4.0"
