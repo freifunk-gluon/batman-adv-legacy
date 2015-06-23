@@ -54,7 +54,7 @@ void batadv_free_rcu_tt_local_entry(struct rcu_head *rcu)
 	kfree(tt_local_entry);
 }
 
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 void batadv_free_rcu_backbone_gw(struct rcu_head *rcu)
 {
 	struct batadv_bla_backbone_gw *backbone_gw;
@@ -64,7 +64,7 @@ void batadv_free_rcu_backbone_gw(struct rcu_head *rcu)
 }
 #endif
 
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 void batadv_free_rcu_dat_entry(struct rcu_head *rcu)
 {
 	struct batadv_dat_entry *dat_entry;
@@ -74,7 +74,7 @@ void batadv_free_rcu_dat_entry(struct rcu_head *rcu)
 }
 #endif
 
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 void batadv_free_rcu_nc_path(struct rcu_head *rcu)
 {
 	struct batadv_nc_path *nc_path;

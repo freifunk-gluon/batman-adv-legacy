@@ -406,10 +406,10 @@ static ssize_t batadv_store_gw_bwidth(struct kobject *kobj,
 
 BATADV_ATTR_SIF_BOOL(aggregated_ogms, S_IRUGO | S_IWUSR, NULL);
 BATADV_ATTR_SIF_BOOL(bonding, S_IRUGO | S_IWUSR, NULL);
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 BATADV_ATTR_SIF_BOOL(bridge_loop_avoidance, S_IRUGO | S_IWUSR, NULL);
 #endif
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 BATADV_ATTR_SIF_BOOL(distributed_arp_table, S_IRUGO | S_IWUSR, NULL);
 #endif
 BATADV_ATTR_SIF_BOOL(fragmentation, S_IRUGO | S_IWUSR, batadv_update_min_mtu);
@@ -425,20 +425,20 @@ BATADV_ATTR_SIF_UINT(gw_sel_class, S_IRUGO | S_IWUSR, 1, BATADV_TQ_MAX_VALUE,
 		     batadv_post_gw_deselect);
 static BATADV_ATTR(gw_bandwidth, S_IRUGO | S_IWUSR, batadv_show_gw_bwidth,
 		   batadv_store_gw_bwidth);
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 BATADV_ATTR_SIF_UINT(log_level, S_IRUGO | S_IWUSR, 0, BATADV_DBG_ALL, NULL);
 #endif
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 BATADV_ATTR_SIF_BOOL(network_coding, S_IRUGO | S_IWUSR, NULL);
 #endif
 
 static struct batadv_attribute *batadv_mesh_attrs[] = {
 	&batadv_attr_aggregated_ogms,
 	&batadv_attr_bonding,
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 	&batadv_attr_bridge_loop_avoidance,
 #endif
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 	&batadv_attr_distributed_arp_table,
 #endif
 	&batadv_attr_fragmentation,
@@ -449,10 +449,10 @@ static struct batadv_attribute *batadv_mesh_attrs[] = {
 	&batadv_attr_hop_penalty,
 	&batadv_attr_gw_sel_class,
 	&batadv_attr_gw_bandwidth,
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 	&batadv_attr_log_level,
 #endif
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 	&batadv_attr_network_coding,
 #endif
 	NULL,

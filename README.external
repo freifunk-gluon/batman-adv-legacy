@@ -35,14 +35,14 @@ option  can be set to to y (enabled), n (disabled) or m (build as
 module).  Available  options  and  their    possible   values are
 (default marked with an "*")
 
- * CONFIG_BATMAN_ADV_DEBUG=[y|n*] (B.A.T.M.A.N. debugging)
- * CONFIG_BATMAN_ADV_BLA=[y*|n] (B.A.T.M.A.N. bridge loop avoidance)
- * CONFIG_BATMAN_ADV_DAT=[y*|n] (B.A.T.M.A.N. Distributed ARP Table)
- * CONFIG_BATMAN_ADV_NC=[y|n*] (B.A.T.M.A.N. Network Coding)
+ * CONFIG_BATMAN_ADV_LEGACY_DEBUG=[y|n*] (B.A.T.M.A.N. debugging)
+ * CONFIG_BATMAN_ADV_LEGACY_BLA=[y*|n] (B.A.T.M.A.N. bridge loop avoidance)
+ * CONFIG_BATMAN_ADV_LEGACY_DAT=[y*|n] (B.A.T.M.A.N. Distributed ARP Table)
+ * CONFIG_BATMAN_ADV_LEGACY_NC=[y|n*] (B.A.T.M.A.N. Network Coding)
 
 e.g., debugging can be enabled by
 
-# make CONFIG_BATMAN_ADV_DEBUG=y
+# make CONFIG_BATMAN_ADV_LEGACY_DEBUG=y
 
 Keep  in  mind  that  all  options  must  also  be added to "make
 install" call.
