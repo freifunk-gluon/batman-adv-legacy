@@ -43,7 +43,7 @@ REVISION= $(shell	if [ -d "$(PWD)/.git" ]; then \
 			fi)
 
 CONFIG_BATMAN_ADV_LEGACY=m
-batman-adv-y += compat.o
+batman-adv-legacy-y += compat.o
 ifneq ($(REVISION),)
 ccflags-y += -DBATADV_SOURCE_VERSION=\"$(REVISION)\"
 endif
