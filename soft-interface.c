@@ -162,7 +162,7 @@ static int batadv_interface_tx(struct sk_buff *skb,
 	if (atomic_read(&bat_priv->mesh_state) != BATADV_MESH_ACTIVE)
 		goto dropped;
 
-	soft_iface->trans_start = jiffies;
+	netif_trans_update(soft_iface);
 
 	switch (ntohs(ethhdr->h_proto)) {
 	case ETH_P_8021Q:

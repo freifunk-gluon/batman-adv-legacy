@@ -360,4 +360,14 @@ static inline bool seq_has_overflowed(struct seq_file *m)
 
 #endif /* < KERNEL_VERSION(4, 5, 0) */
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 7, 0)
+
+#define netif_trans_update batadv_netif_trans_update
+static inline void batadv_netif_trans_update(struct net_device *dev)
+{
+	dev->trans_start = jiffies;
+}
+
+#endif /* < KERNEL_VERSION(4, 7, 0) */
+
 #endif /* _NET_BATMAN_ADV_COMPAT_H_ */
