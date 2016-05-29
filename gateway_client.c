@@ -141,7 +141,7 @@ batadv_gw_get_best_gw_node(struct batadv_priv *bat_priv)
 			batadv_gw_bandwidth_to_kbit(orig_node->gw_flags,
 						    &down, &up);
 
-			tmp_gw_factor = tq_avg * tq_avg * down * 100 * 100;
+			tmp_gw_factor = (uint64_t)tq_avg * tq_avg * down * 100 * 100;
 			tmp_gw_factor >>= 18;
 
 			if ((tmp_gw_factor > max_gw_factor) ||
