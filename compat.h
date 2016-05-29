@@ -258,7 +258,6 @@ static int batadv_interface_set_mac_addr(struct net_device *dev, void *p) \
 }\
 static int __batadv_interface_set_mac_addr(x, y)
 
-#define netdev_master_upper_dev_link netdev_set_master
 #define netdev_upper_dev_unlink(slave, master) netdev_set_master(slave, NULL)
 #define netdev_master_upper_dev_get(dev) \
 ({\
@@ -348,5 +347,17 @@ static inline bool seq_has_overflowed(struct seq_file *m)
 #define dev_get_iflink(_net_dev) ((_net_dev)->iflink)
 
 #endif /* < KERNEL_VERSION(4, 1, 0) */
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 9, 0)
+
+#define netdev_master_upper_dev_link(dev, upper_dev, upper_priv, upper_info) \
+	netdev_set_master(dev, upper_dev)
+
+#elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 5, 0)
+
+#define netdev_master_upper_dev_link(dev, upper_dev, upper_priv, upper_info) \
+	netdev_master_upper_dev_link(dev, upper_dev)
+
+#endif /* < KERNEL_VERSION(4, 5, 0) */
 
 #endif /* _NET_BATMAN_ADV_COMPAT_H_ */
