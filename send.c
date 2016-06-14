@@ -28,6 +28,7 @@
 #include "originator.h"
 #include "network-coding.h"
 
+#include <linux/errno.h>
 #include <linux/if_ether.h>
 
 static void batadv_send_outstanding_bcast_packet(struct work_struct *work);
@@ -96,7 +97,7 @@ send_skb_err:
  * attempted.
  *
  * Returns NET_XMIT_SUCCESS on success, NET_XMIT_DROP on failure, or
- * NET_XMIT_POLICED if the skb is buffered for later transmit.
+ * -EINPROGRESS if the skb is buffered for later transmit.
  */
 int batadv_send_skb_to_orig(struct sk_buff *skb,
 			    struct batadv_orig_node *orig_node,
@@ -116,7 +117,7 @@ int batadv_send_skb_to_orig(struct sk_buff *skb,
 	 * network coding fails, then send the packet as usual.
 	 */
 	if (recv_if && batadv_nc_skb_forward(skb, neigh_node)) {
-		ret = NET_XMIT_POLICED;
+		ret = -EINPROGRESS;
 	} else {
 		batadv_send_skb_packet(skb, neigh_node->if_incoming,
 				       neigh_node->addr);
