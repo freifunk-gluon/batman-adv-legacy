@@ -60,6 +60,12 @@ static void batadv_recv_handler_init(void);
 
 static int __init batadv_init(void)
 {
+	int ret;
+
+	ret = batadv_tt_cache_init();
+	if (ret < 0)
+		return ret;
+
 	INIT_LIST_HEAD(&batadv_hardif_list);
 	INIT_HLIST_HEAD(&batadv_algo_list);
 
@@ -71,7 +77,7 @@ static int __init batadv_init(void)
 	batadv_event_workqueue = create_singlethread_workqueue("bat_events");
 
 	if (!batadv_event_workqueue)
-		return -ENOMEM;
+		goto err_create_wq;
 
 	batadv_socket_init();
 	batadv_debugfs_init();
@@ -84,6 +90,11 @@ static int __init batadv_init(void)
 		BATADV_SOURCE_VERSION, BATADV_COMPAT_VERSION);
 
 	return 0;
+
+err_create_wq:
+	batadv_tt_cache_destroy();
+
+	return -ENOMEM;
 }
 
 static void __exit batadv_exit(void)
@@ -99,6 +110,8 @@ static void __exit batadv_exit(void)
 	batadv_event_workqueue = NULL;
 
 	rcu_barrier();
+
+	batadv_tt_cache_destroy();
 }
 
 int batadv_mesh_init(struct net_device *soft_iface)
