@@ -45,7 +45,7 @@ static void batadv_gw_node_free_ref(struct batadv_gw_node *gw_node)
 		kfree_rcu(gw_node, rcu);
 }
 
-static struct batadv_gw_node *
+struct batadv_gw_node *
 batadv_gw_get_selected_gw_node(struct batadv_priv *bat_priv)
 {
 	struct batadv_gw_node *gw_node;
