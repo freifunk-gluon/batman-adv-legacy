@@ -18,8 +18,11 @@
 #ifndef _NET_BATMAN_ADV_NETLINK_H_
 #define _NET_BATMAN_ADV_NETLINK_H_
 
+struct nlmsghdr;
+
 void batadv_netlink_register(void);
 void batadv_netlink_unregister(void);
+int batadv_netlink_get_ifindex(const struct nlmsghdr *nlh, int attrtype);
 
 extern struct genl_family batadv_netlink_family;
 

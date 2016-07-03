@@ -39,6 +39,7 @@
 #include "bat_algo.h"
 #include "hard-interface.h"
 #include "soft-interface.h"
+#include "translation-table.h"
 
 struct genl_family batadv_netlink_family;
 
@@ -57,6 +58,14 @@ static struct nla_policy batadv_netlink_policy[NUM_BATADV_ATTR] = {
 	[BATADV_ATTR_TPMETER_BYTES]	= { .type = NLA_U64 },
 	[BATADV_ATTR_TPMETER_COOKIE]	= { .type = NLA_U32 },
 	[BATADV_ATTR_ACTIVE]		= { .type = NLA_FLAG },
+	[BATADV_ATTR_TT_ADDRESS]	= { .len = ETH_ALEN },
+	[BATADV_ATTR_TT_TTVN]		= { .type = NLA_U8 },
+	[BATADV_ATTR_TT_LAST_TTVN]	= { .type = NLA_U8 },
+	[BATADV_ATTR_TT_CRC32]		= { .type = NLA_U32 },
+	[BATADV_ATTR_TT_VID]		= { .type = NLA_U16 },
+	[BATADV_ATTR_TT_FLAGS]		= { .type = NLA_U32 },
+	[BATADV_ATTR_FLAG_BEST]		= { .type = NLA_FLAG },
+	[BATADV_ATTR_LAST_SEEN_MSECS]	= { .type = NLA_U32 },
 };
 
 /**
@@ -66,7 +75,7 @@ static struct nla_policy batadv_netlink_policy[NUM_BATADV_ATTR] = {
  *
  * Return: interface index, or 0.
  */
-static int
+int
 batadv_netlink_get_ifindex(const struct nlmsghdr *nlh, int attrtype)
 {
 	struct nlattr *attr = nlmsg_find_attr(nlh, GENL_HDRLEN, attrtype);
@@ -300,6 +309,18 @@ static __genl_const struct genl_ops batadv_netlink_ops[] = {
 		.flags = GENL_ADMIN_PERM,
 		.policy = batadv_netlink_policy,
 		.dumpit = batadv_netlink_dump_hardifs,
+	},
+	{
+		.cmd = BATADV_CMD_GET_TRANSTABLE_LOCAL,
+		.flags = GENL_ADMIN_PERM,
+		.policy = batadv_netlink_policy,
+		.dumpit = batadv_tt_local_dump,
+	},
+	{
+		.cmd = BATADV_CMD_GET_TRANSTABLE_GLOBAL,
+		.flags = GENL_ADMIN_PERM,
+		.policy = batadv_netlink_policy,
+		.dumpit = batadv_tt_global_dump,
 	},
 };
 
