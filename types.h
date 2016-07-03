@@ -870,6 +870,7 @@ struct batadv_frag_packet_list_entry {
  * @bat_ogm_schedule: prepare a new outgoing OGM for the send queue
  * @bat_ogm_emit: send scheduled OGM
  * @bat_orig_dump: dump originators to a netlink socket (optional)
+ * @bat_gw_dump: dump gateways to a netlink socket (optional)
  */
 struct batadv_algo_ops {
 	struct hlist_node list;
@@ -884,6 +885,8 @@ struct batadv_algo_ops {
 	void (*bat_orig_dump)(struct sk_buff *msg, struct netlink_callback *cb,
 			      struct batadv_priv *priv,
 			      struct batadv_hard_iface *hard_iface);
+	void (*bat_gw_dump)(struct sk_buff *msg, struct netlink_callback *cb,
+			    struct batadv_priv *priv);
 };
 
 /**
