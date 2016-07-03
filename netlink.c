@@ -39,6 +39,7 @@
 
 #include "bat_algo.h"
 #include "hard-interface.h"
+#include "originator.h"
 #include "soft-interface.h"
 #include "translation-table.h"
 
@@ -324,6 +325,12 @@ static __genl_const struct genl_ops batadv_netlink_ops[] = {
 		.flags = GENL_ADMIN_PERM,
 		.policy = batadv_netlink_policy,
 		.dumpit = batadv_tt_global_dump,
+	},
+	{
+		.cmd = BATADV_CMD_GET_ORIGINATORS,
+		.flags = GENL_ADMIN_PERM,
+		.policy = batadv_netlink_policy,
+		.dumpit = batadv_orig_dump,
 	},
 };
 
