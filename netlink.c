@@ -27,10 +27,12 @@
 #include <linux/netlink.h>
 #include <linux/printk.h>
 #include <linux/stddef.h>
+#include <linux/types.h>
 #include <net/genetlink.h>
 #include <net/netlink.h>
 #include "uapi/linux/batman_adv.h"
 
+#include "bat_algo.h"
 #include "hard-interface.h"
 #include "soft-interface.h"
 
@@ -163,6 +165,12 @@ static __genl_const struct genl_ops batadv_netlink_ops[] = {
 		.flags = GENL_ADMIN_PERM,
 		.policy = batadv_netlink_policy,
 		.doit = batadv_netlink_get_mesh_info,
+	},
+	{
+		.cmd = BATADV_CMD_GET_ROUTING_ALGOS,
+		.flags = GENL_ADMIN_PERM,
+		.policy = batadv_netlink_policy,
+		.dumpit = batadv_algo_dump,
 	},
 };
 

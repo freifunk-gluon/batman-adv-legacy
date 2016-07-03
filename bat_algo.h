@@ -20,6 +20,10 @@
 #ifndef _NET_BATMAN_ADV_BAT_ALGO_H_
 #define _NET_BATMAN_ADV_BAT_ALGO_H_
 
+struct netlink_callback;
+struct sk_buff;
+
 int batadv_iv_init(void);
+int batadv_algo_dump(struct sk_buff *msg, struct netlink_callback *cb);
 
 #endif /* _NET_BATMAN_ADV_BAT_ALGO_H_ */

@@ -21,4 +21,6 @@
 void batadv_netlink_register(void);
 void batadv_netlink_unregister(void);
 
+extern struct genl_family batadv_netlink_family;
+
 #endif /* _NET_BATMAN_ADV_NETLINK_H_ */
