@@ -365,6 +365,13 @@ static __genl_const struct genl_ops batadv_netlink_ops[] = {
 		.policy = batadv_netlink_policy,
 		.dumpit = batadv_bla_claim_dump,
 	},
+	{
+		.cmd = BATADV_CMD_GET_BLA_BACKBONE,
+		.flags = GENL_ADMIN_PERM,
+		.policy = batadv_netlink_policy,
+		.dumpit = batadv_bla_backbone_dump,
+	},
+
 };
 
 static __genl_const struct genl_multicast_group batadv_netlink_mcgrps[] = {

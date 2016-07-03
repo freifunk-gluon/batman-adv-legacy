@@ -25,6 +25,7 @@ int batadv_bla_rx(struct batadv_priv *bat_priv, struct sk_buff *skb,
 		  unsigned short vid, bool is_bcast);
 int batadv_bla_tx(struct batadv_priv *bat_priv, struct sk_buff *skb,
 		  unsigned short vid);
+int batadv_bla_backbone_dump(struct sk_buff *msg, struct netlink_callback *cb);
 int batadv_bla_is_backbone_gw(struct sk_buff *skb,
 			      struct batadv_orig_node *orig_node, int hdr_size);
 int batadv_bla_claim_table_seq_print_text(struct seq_file *seq, void *offset);
@@ -106,6 +107,12 @@ static inline void batadv_bla_free(struct batadv_priv *bat_priv)
 
 static inline int batadv_bla_claim_dump(struct sk_buff *msg,
 					struct netlink_callback *cb)
+{
+	return -EOPNOTSUPP;
+}
+
+static inline int batadv_bla_backbone_dump(struct sk_buff *msg,
+					   struct netlink_callback *cb)
 {
 	return -EOPNOTSUPP;
 }
