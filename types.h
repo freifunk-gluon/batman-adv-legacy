@@ -31,7 +31,7 @@
 	(ETH_HLEN + max(sizeof(struct batadv_unicast_packet), \
 			sizeof(struct batadv_bcast_packet)))
 
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 
 /* batadv_dat_addr_t is the type used for all DHT addresses. If it is changed,
  * BATADV_DAT_ADDR_MAX is changed as well.
@@ -40,7 +40,7 @@
  */
 #define batadv_dat_addr_t uint16_t
 
-#endif /* CONFIG_BATMAN_ADV_DAT */
+#endif /* CONFIG_BATMAN_ADV_LEGACY_DAT */
 
 /**
  * struct batadv_hard_iface_bat_iv - per hard interface B.A.T.M.A.N. IV data
@@ -140,7 +140,7 @@ struct batadv_orig_node {
 	uint8_t orig[ETH_ALEN];
 	uint8_t primary_addr[ETH_ALEN];
 	struct batadv_neigh_node __rcu *router; /* rcu protected pointer */
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 	batadv_dat_addr_t dat_addr;
 #endif
 	unsigned long *bcast_own;
@@ -178,7 +178,7 @@ struct batadv_orig_node {
 	struct list_head bond_list;
 	atomic_t refcount;
 	struct rcu_head rcu;
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 	struct list_head in_coding_list;
 	struct list_head out_coding_list;
 	spinlock_t in_coding_list_lock; /* Protects in_coding_list */
@@ -245,7 +245,7 @@ struct batadv_neigh_node {
  * @crc: crc32 checksum of broadcast payload
  * @entrytime: time when the broadcast packet was received
  */
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 struct batadv_bcast_duplist_entry {
 	uint8_t orig[ETH_ALEN];
 	__be32 crc;
@@ -309,14 +309,14 @@ enum batadv_counters {
 	BATADV_CNT_TT_RESPONSE_RX,
 	BATADV_CNT_TT_ROAM_ADV_TX,
 	BATADV_CNT_TT_ROAM_ADV_RX,
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 	BATADV_CNT_DAT_GET_TX,
 	BATADV_CNT_DAT_GET_RX,
 	BATADV_CNT_DAT_PUT_TX,
 	BATADV_CNT_DAT_PUT_RX,
 	BATADV_CNT_DAT_CACHED_REPLY_TX,
 #endif
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 	BATADV_CNT_NC_CODE,
 	BATADV_CNT_NC_CODE_BYTES,
 	BATADV_CNT_NC_RECODE,
@@ -384,7 +384,7 @@ struct batadv_priv_tt {
  * @claim_dest: local claim data (e.g. claim group)
  * @work: work queue callback item for cleanups & bla announcements
  */
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 struct batadv_priv_bla {
 	atomic_t num_requests;
 	struct batadv_hashtable *claim_hash;
@@ -406,7 +406,7 @@ struct batadv_priv_bla {
  * @lock: lock protecting log_buff, log_start & log_end
  * @queue_wait: log reader's wait queue
  */
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 struct batadv_priv_debug_log {
 	char log_buff[BATADV_LOG_BUF_LEN];
 	unsigned long log_start;
@@ -436,7 +436,7 @@ struct batadv_priv_gw {
  * @hash: hashtable representing the local ARP cache
  * @work: work queue callback item for cache purging
  */
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 struct batadv_priv_dat {
 	batadv_dat_addr_t addr;
 	struct batadv_hashtable *hash;
@@ -526,10 +526,10 @@ struct batadv_priv {
 	atomic_t bonding;
 	atomic_t fragmentation;
 	atomic_t ap_isolation;
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 	atomic_t bridge_loop_avoidance;
 #endif
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 	atomic_t distributed_arp_table;
 #endif
 	atomic_t gw_mode;
@@ -537,7 +537,7 @@ struct batadv_priv {
 	atomic_t gw_bandwidth;
 	atomic_t orig_interval;
 	atomic_t hop_penalty;
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 	atomic_t log_level;
 #endif
 	atomic_t bcast_seqno;
@@ -555,21 +555,21 @@ struct batadv_priv {
 	struct work_struct cleanup_work;
 	struct batadv_hard_iface __rcu *primary_if;  /* rcu protected pointer */
 	struct batadv_algo_ops *bat_algo_ops;
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 	struct batadv_priv_bla bla;
 #endif
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 	struct batadv_priv_debug_log *debug_log;
 #endif
 	struct batadv_priv_gw gw;
 	struct batadv_priv_tt tt;
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 	struct batadv_priv_dat dat;
 #endif
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 	atomic_t network_coding;
 	struct batadv_priv_nc nc;
-#endif /* CONFIG_BATMAN_ADV_NC */
+#endif /* CONFIG_BATMAN_ADV_LEGACY_NC */
 };
 
 /**
@@ -618,7 +618,7 @@ struct batadv_socket_packet {
  * @refcount: number of contexts the object is used
  * @rcu: struct used for freeing in an RCU-safe manner
  */
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 struct batadv_bla_backbone_gw {
 	uint8_t orig[ETH_ALEN];
 	unsigned short vid;

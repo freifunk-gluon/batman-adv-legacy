@@ -20,7 +20,7 @@
 #ifndef _NET_BATMAN_ADV_ARP_H_
 #define _NET_BATMAN_ADV_ARP_H_
 
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 
 #include "types.h"
 #include "originator.h"
@@ -162,6 +162,6 @@ static inline void batadv_dat_inc_counter(struct batadv_priv *bat_priv,
 {
 }
 
-#endif /* CONFIG_BATMAN_ADV_DAT */
+#endif /* CONFIG_BATMAN_ADV_LEGACY_DAT */
 
 #endif /* _NET_BATMAN_ADV_ARP_H_ */

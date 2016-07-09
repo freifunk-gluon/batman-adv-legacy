@@ -20,13 +20,13 @@
 
 # read README.external for more information about the configuration
 # B.A.T.M.A.N. debugging:
-export CONFIG_BATMAN_ADV_DEBUG=n
+export CONFIG_BATMAN_ADV_LEGACY_DEBUG=n
 # B.A.T.M.A.N. bridge loop avoidance:
-export CONFIG_BATMAN_ADV_BLA=y
+export CONFIG_BATMAN_ADV_LEGACY_BLA=y
 # B.A.T.M.A.N. distributed ARP table:
-export CONFIG_BATMAN_ADV_DAT=y
+export CONFIG_BATMAN_ADV_LEGACY_DAT=y
 # B.A.T.M.A.N network coding (catwoman):
-export CONFIG_BATMAN_ADV_NC=n
+export CONFIG_BATMAN_ADV_LEGACY_NC=n
 
 PWD:=$(shell pwd)
 KERNELPATH ?= /lib/modules/$(shell uname -r)/build
@@ -42,8 +42,8 @@ REVISION= $(shell	if [ -d "$(PWD)/.git" ]; then \
 				echo $$(git --git-dir="$(PWD)/.git" describe --always --dirty --match "v*" |sed 's/^v//' 2> /dev/null || echo "[unknown]"); \
 			fi)
 
-CONFIG_BATMAN_ADV=m
-batman-adv-y += compat.o
+CONFIG_BATMAN_ADV_LEGACY=m
+batman-adv-legacy-y += compat.o
 ifneq ($(REVISION),)
 ccflags-y += -DBATADV_SOURCE_VERSION=\"$(REVISION)\"
 endif

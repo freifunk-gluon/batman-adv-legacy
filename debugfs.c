@@ -35,7 +35,7 @@
 
 static struct dentry *batadv_debugfs;
 
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 #define BATADV_LOG_BUFF_MASK (batadv_log_buff_len - 1)
 
 static const int batadv_log_buff_len = BATADV_LOG_BUF_LEN;
@@ -227,7 +227,7 @@ static void batadv_debug_log_cleanup(struct batadv_priv *bat_priv)
 	kfree(bat_priv->debug_log);
 	bat_priv->debug_log = NULL;
 }
-#else /* CONFIG_BATMAN_ADV_DEBUG */
+#else /* CONFIG_BATMAN_ADV_LEGACY_DEBUG */
 static int batadv_debug_log_setup(struct batadv_priv *bat_priv)
 {
 	return 0;
@@ -262,7 +262,7 @@ static int batadv_transtable_global_open(struct inode *inode, struct file *file)
 	return single_open(file, batadv_tt_global_seq_print_text, net_dev);
 }
 
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 static int batadv_bla_claim_table_open(struct inode *inode, struct file *file)
 {
 	struct net_device *net_dev = (struct net_device *)inode->i_private;
@@ -280,7 +280,7 @@ static int batadv_bla_backbone_table_open(struct inode *inode,
 
 #endif
 
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 /**
  * batadv_dat_cache_open - Prepare file handler for reads from dat_chache
  * @inode: inode which was opened
@@ -304,7 +304,7 @@ struct batadv_debuginfo {
 	const struct file_operations fops;
 };
 
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 static int batadv_nc_nodes_open(struct inode *inode, struct file *file)
 {
 	struct net_device *net_dev = (struct net_device *)inode->i_private;
@@ -339,17 +339,17 @@ static BATADV_DEBUGINFO(originators, S_IRUGO, batadv_originators_open);
 static BATADV_DEBUGINFO(gateways, S_IRUGO, batadv_gateways_open);
 static BATADV_DEBUGINFO(transtable_global, S_IRUGO,
 			batadv_transtable_global_open);
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 static BATADV_DEBUGINFO(bla_claim_table, S_IRUGO, batadv_bla_claim_table_open);
 static BATADV_DEBUGINFO(bla_backbone_table, S_IRUGO,
 			batadv_bla_backbone_table_open);
 #endif
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 static BATADV_DEBUGINFO(dat_cache, S_IRUGO, batadv_dat_cache_open);
 #endif
 static BATADV_DEBUGINFO(transtable_local, S_IRUGO,
 			batadv_transtable_local_open);
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 static BATADV_DEBUGINFO(nc_nodes, S_IRUGO, batadv_nc_nodes_open);
 #endif
 
@@ -357,15 +357,15 @@ static struct batadv_debuginfo *batadv_mesh_debuginfos[] = {
 	&batadv_debuginfo_originators,
 	&batadv_debuginfo_gateways,
 	&batadv_debuginfo_transtable_global,
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 	&batadv_debuginfo_bla_claim_table,
 	&batadv_debuginfo_bla_backbone_table,
 #endif
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 	&batadv_debuginfo_dat_cache,
 #endif
 	&batadv_debuginfo_transtable_local,
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 	&batadv_debuginfo_nc_nodes,
 #endif
 	NULL,

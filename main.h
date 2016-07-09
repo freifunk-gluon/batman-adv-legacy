@@ -22,8 +22,8 @@
 
 #define BATADV_DRIVER_AUTHOR "Marek Lindner <lindner_marek@yahoo.de>, " \
 			     "Simon Wunderlich <siwu@hrz.tu-chemnitz.de>"
-#define BATADV_DRIVER_DESC   "B.A.T.M.A.N. advanced"
-#define BATADV_DRIVER_DEVICE "batman-adv"
+#define BATADV_DRIVER_DESC   "B.A.T.M.A.N. advanced legacy (compat14)"
+#define BATADV_DRIVER_DEVICE "batman-adv-legacy"
 
 #ifndef BATADV_SOURCE_VERSION
 #define BATADV_SOURCE_VERSION "2013.4.0"
@@ -217,7 +217,7 @@ enum batadv_dbg_level {
 	BATADV_DBG_ALL    = 63,
 };
 
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 int batadv_debug_log(struct batadv_priv *bat_priv, const char *fmt, ...)
 __printf(2, 3);
 
@@ -229,7 +229,7 @@ __printf(2, 3);
 			batadv_debug_log(bat_priv, fmt, ## arg);\
 	}							\
 	while (0)
-#else /* !CONFIG_BATMAN_ADV_DEBUG */
+#else /* !CONFIG_BATMAN_ADV_LEGACY_DEBUG */
 __printf(4, 5)
 static inline void _batadv_dbg(int type __always_unused,
 			      struct batadv_priv *bat_priv __always_unused,

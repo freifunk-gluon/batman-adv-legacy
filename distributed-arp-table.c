@@ -312,7 +312,7 @@ out:
 		batadv_dat_entry_free_ref(dat_entry);
 }
 
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 
 /**
  * batadv_dbg_arp - print a debug message containing all the ARP packet details
@@ -394,7 +394,7 @@ static void batadv_dbg_arp(struct batadv_priv *bat_priv, struct sk_buff *skb,
 {
 }
 
-#endif /* CONFIG_BATMAN_ADV_DEBUG */
+#endif /* CONFIG_BATMAN_ADV_LEGACY_DEBUG */
 
 /**
  * batadv_is_orig_node_eligible - check whether a node can be a DHT candidate

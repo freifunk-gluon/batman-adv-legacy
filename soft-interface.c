@@ -465,10 +465,10 @@ static int batadv_softif_init_late(struct net_device *dev)
 
 	atomic_set(&bat_priv->aggregated_ogms, 1);
 	atomic_set(&bat_priv->bonding, 0);
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 	atomic_set(&bat_priv->bridge_loop_avoidance, 0);
 #endif
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 	atomic_set(&bat_priv->distributed_arp_table, 1);
 #endif
 	atomic_set(&bat_priv->ap_isolation, 0);
@@ -477,7 +477,7 @@ static int batadv_softif_init_late(struct net_device *dev)
 	atomic_set(&bat_priv->gw_bandwidth, 41);
 	atomic_set(&bat_priv->orig_interval, 1000);
 	atomic_set(&bat_priv->hop_penalty, 30);
-#ifdef CONFIG_BATMAN_ADV_DEBUG
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DEBUG
 	atomic_set(&bat_priv->log_level, 0);
 #endif
 	atomic_set(&bat_priv->fragmentation, 1);
@@ -489,7 +489,7 @@ static int batadv_softif_init_late(struct net_device *dev)
 	atomic_set(&bat_priv->tt.vn, 0);
 	atomic_set(&bat_priv->tt.local_changes, 0);
 	atomic_set(&bat_priv->tt.ogm_append_cnt, 0);
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 	atomic_set(&bat_priv->bla.num_requests, 0);
 #endif
 	bat_priv->tt.last_changeset = NULL;
@@ -698,7 +698,7 @@ int batadv_softif_is_valid(const struct net_device *net_dev)
 }
 
 struct rtnl_link_ops batadv_link_ops __read_mostly = {
-	.kind		= "batadv",
+	.kind		= "batadv-legacy",
 	.priv_size	= sizeof(struct batadv_priv),
 	.setup		= batadv_softif_init_early,
 	.dellink	= batadv_softif_destroy_netlink,
@@ -768,14 +768,14 @@ static const struct {
 	{ "tt_response_rx" },
 	{ "tt_roam_adv_tx" },
 	{ "tt_roam_adv_rx" },
-#ifdef CONFIG_BATMAN_ADV_DAT
+#ifdef CONFIG_BATMAN_ADV_LEGACY_DAT
 	{ "dat_get_tx" },
 	{ "dat_get_rx" },
 	{ "dat_put_tx" },
 	{ "dat_put_rx" },
 	{ "dat_cached_reply_tx" },
 #endif
-#ifdef CONFIG_BATMAN_ADV_NC
+#ifdef CONFIG_BATMAN_ADV_LEGACY_NC
 	{ "nc_code" },
 	{ "nc_code_bytes" },
 	{ "nc_recode" },

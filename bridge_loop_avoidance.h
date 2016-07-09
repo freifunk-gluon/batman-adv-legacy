@@ -20,7 +20,7 @@
 #ifndef _NET_BATMAN_ADV_BLA_H_
 #define _NET_BATMAN_ADV_BLA_H_
 
-#ifdef CONFIG_BATMAN_ADV_BLA
+#ifdef CONFIG_BATMAN_ADV_LEGACY_BLA
 int batadv_bla_rx(struct batadv_priv *bat_priv, struct sk_buff *skb,
 		  unsigned short vid, bool is_bcast);
 int batadv_bla_tx(struct batadv_priv *bat_priv, struct sk_buff *skb,
@@ -40,7 +40,7 @@ int batadv_bla_init(struct batadv_priv *bat_priv);
 void batadv_bla_free(struct batadv_priv *bat_priv);
 
 #define BATADV_BLA_CRC_INIT	0
-#else /* ifdef CONFIG_BATMAN_ADV_BLA */
+#else /* ifdef CONFIG_BATMAN_ADV_LEGACY_BLA */
 
 static inline int batadv_bla_rx(struct batadv_priv *bat_priv,
 				struct sk_buff *skb, unsigned short vid,
@@ -103,6 +103,6 @@ static inline void batadv_bla_free(struct batadv_priv *bat_priv)
 {
 }
 
-#endif /* ifdef CONFIG_BATMAN_ADV_BLA */
+#endif /* ifdef CONFIG_BATMAN_ADV_LEGACY_BLA */
 
 #endif /* ifndef _NET_BATMAN_ADV_BLA_H_ */
