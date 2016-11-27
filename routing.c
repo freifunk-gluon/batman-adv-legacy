@@ -667,7 +667,7 @@ int batadv_recv_roam_adv(struct sk_buff *skb, struct batadv_hard_iface *recv_if)
 		   roam_adv_packet->src, roam_adv_packet->client);
 
 	batadv_tt_global_add(bat_priv, orig_node, roam_adv_packet->client,
-			     BATADV_TT_CLIENT_ROAM,
+			     BATADV_TT_V14_CLIENT_ROAM,
 			     atomic_read(&orig_node->last_ttvn) + 1);
 
 	batadv_orig_node_free_ref(orig_node);
