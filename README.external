@@ -25,6 +25,25 @@ if you want to install this module:
 
 # sudo make install
 
+DKMS
+----
+To simplify rebuilding of the  module after a kernel upgrade, the
+DKMS (Dynamic Kernel Module Support) system can be used.
+
+For Debian/Ubuntu:
+# apt-get install linux-headers dkms
+# git clone https://github.com/freifunk-gluon/batman-adv-legacy /usr/src/batman-adv-legacy-2013.4.0
+# dkms add -m batman-adv-legacy -v 2013.4.0
+# dkms build -m batman-adv-legacy -v 2013.4.0 && dkms install -m batman-adv-legacy -v 2013.4.0 --force
+
+The  last line must  be run  whenever a  kernel upgrade  has been
+installed. It  can also be added to  something like /etc/rc.local
+so that it is executed on every reboot. It doesn't do anything if
+the module is already built and installed for the current kernel.
+
+To remove module from DKMS:
+# dkms remove -m batman-adv-legacy -v 2013.4.0 --all
+
 CONFIGURATION
 -------------
 
