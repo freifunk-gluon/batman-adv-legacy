@@ -544,4 +544,11 @@ static inline void batadv_netif_trans_update(struct net_device *dev)
 
 #endif /* < KERNEL_VERSION(4, 12, 0) */
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+
+#define batadv_softif_slave_add(__dev, __slave_dev, __extack) \
+	batadv_softif_slave_add(__dev, __slave_dev)
+
+#endif /* < KERNEL_VERSION(4, 15, 0) */
+
 #endif /* _NET_BATMAN_ADV_COMPAT_H_ */
