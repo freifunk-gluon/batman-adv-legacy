@@ -57,6 +57,8 @@ batadv_frag_merge_packet(struct list_head *head,
 	if (pskb_expand_head(skb, 0, tmp_skb->len, GFP_ATOMIC) < 0)
 		goto err;
 
+	skb->ip_summed = CHECKSUM_NONE;
+
 	/* move free entry to end */
 	tfp->skb = NULL;
 	tfp->seqno = 0;
