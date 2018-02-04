@@ -91,18 +91,18 @@ enum batadv_tt_query_flags {
 	BATADV_TT_FULL_TABLE = BIT(2),
 };
 
-/* BATADV_TT_CLIENT flags.
+/* BATADV_TT_V14_CLIENT flags.
  * Flags from BIT(0) to BIT(7) are sent on the wire, while flags from BIT(8) to
  * BIT(15) are used for local computation only
  */
-enum batadv_tt_client_flags {
-	BATADV_TT_CLIENT_DEL     = BIT(0),
-	BATADV_TT_CLIENT_ROAM    = BIT(1),
-	BATADV_TT_CLIENT_WIFI    = BIT(2),
-	BATADV_TT_CLIENT_TEMP	 = BIT(3),
-	BATADV_TT_CLIENT_NOPURGE = BIT(8),
-	BATADV_TT_CLIENT_NEW     = BIT(9),
-	BATADV_TT_CLIENT_PENDING = BIT(10),
+enum batadv_tt_v14_client_flags {
+	BATADV_TT_V14_CLIENT_DEL     = BIT(0),
+	BATADV_TT_V14_CLIENT_ROAM    = BIT(1),
+	BATADV_TT_V14_CLIENT_WIFI    = BIT(2),
+	BATADV_TT_V14_CLIENT_TEMP    = BIT(3),
+	BATADV_TT_V14_CLIENT_NOPURGE = BIT(8),
+	BATADV_TT_V14_CLIENT_NEW     = BIT(9),
+	BATADV_TT_V14_CLIENT_PENDING = BIT(10),
 };
 
 /* claim frame types for the bridge loop avoidance */

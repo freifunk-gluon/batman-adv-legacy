@@ -33,7 +33,10 @@ void batadv_gw_node_delete(struct batadv_priv *bat_priv,
 			   struct batadv_orig_node *orig_node);
 void batadv_gw_node_purge(struct batadv_priv *bat_priv);
 int batadv_gw_client_seq_print_text(struct seq_file *seq, void *offset);
+int batadv_gw_dump(struct sk_buff *msg, struct netlink_callback *cb);
 bool batadv_gw_is_dhcp_target(struct sk_buff *skb, unsigned int *header_len);
 bool batadv_gw_out_of_range(struct batadv_priv *bat_priv, struct sk_buff *skb);
+struct batadv_gw_node *
+batadv_gw_get_selected_gw_node(struct batadv_priv *bat_priv);
 
 #endif /* _NET_BATMAN_ADV_GATEWAY_CLIENT_H_ */

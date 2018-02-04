@@ -1,6 +1,6 @@
-/* Copyright (C) 2011-2013 B.A.T.M.A.N. contributors:
+/* Copyright (C) 2016 B.A.T.M.A.N. contributors:
  *
- * Marek Lindner
+ * Matthias Schiffer
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of version 2 of the GNU General Public
@@ -12,18 +12,18 @@
  * General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
- * 02110-1301, USA
+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _NET_BATMAN_ADV_BAT_ALGO_H_
-#define _NET_BATMAN_ADV_BAT_ALGO_H_
+#ifndef _NET_BATMAN_ADV_NETLINK_H_
+#define _NET_BATMAN_ADV_NETLINK_H_
 
-struct netlink_callback;
-struct sk_buff;
+struct nlmsghdr;
 
-int batadv_iv_init(void);
-int batadv_algo_dump(struct sk_buff *msg, struct netlink_callback *cb);
+void batadv_netlink_register(void);
+void batadv_netlink_unregister(void);
+int batadv_netlink_get_ifindex(const struct nlmsghdr *nlh, int attrtype);
 
-#endif /* _NET_BATMAN_ADV_BAT_ALGO_H_ */
+extern struct genl_family batadv_netlink_family;
+
+#endif /* _NET_BATMAN_ADV_NETLINK_H_ */

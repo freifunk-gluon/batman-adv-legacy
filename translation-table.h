@@ -20,6 +20,11 @@
 #ifndef _NET_BATMAN_ADV_TRANSLATION_TABLE_H_
 #define _NET_BATMAN_ADV_TRANSLATION_TABLE_H_
 
+struct netlink_callback;
+struct net_device;
+struct seq_file;
+struct sk_buff;
+
 int batadv_tt_len(int changes_num);
 int batadv_tt_init(struct batadv_priv *bat_priv);
 void batadv_tt_local_add(struct net_device *soft_iface, const uint8_t *addr,
@@ -36,6 +41,8 @@ int batadv_tt_global_add(struct batadv_priv *bat_priv,
 			 const unsigned char *addr, uint16_t flags,
 			 uint8_t ttvn);
 int batadv_tt_global_seq_print_text(struct seq_file *seq, void *offset);
+int batadv_tt_local_dump(struct sk_buff *msg, struct netlink_callback *cb);
+int batadv_tt_global_dump(struct sk_buff *msg, struct netlink_callback *cb);
 void batadv_tt_global_del_orig(struct batadv_priv *bat_priv,
 			       struct batadv_orig_node *orig_node,
 			       const char *message);
@@ -64,5 +71,8 @@ bool batadv_tt_local_client_is_roaming(struct batadv_priv *bat_priv,
 bool batadv_tt_add_temporary_global_entry(struct batadv_priv *bat_priv,
 					  struct batadv_orig_node *orig_node,
 					  const unsigned char *addr);
+
+int batadv_tt_cache_init(void);
+void batadv_tt_cache_destroy(void);
 
 #endif /* _NET_BATMAN_ADV_TRANSLATION_TABLE_H_ */

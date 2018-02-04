@@ -22,13 +22,16 @@
 #include "gateway_client.h"
 #include "gateway_common.h"
 #include "hard-interface.h"
+#include "netlink.h"
 #include "originator.h"
+#include "soft-interface.h"
 #include "translation-table.h"
 #include "routing.h"
 #include <linux/ip.h>
 #include <linux/ipv6.h>
 #include <linux/udp.h>
 #include <linux/if_vlan.h>
+#include "uapi/linux/batman_adv.h"
 
 /* This is the offset of the options field in a dhcp packet starting at
  * the beginning of the dhcp header
@@ -42,7 +45,7 @@ static void batadv_gw_node_free_ref(struct batadv_gw_node *gw_node)
 		kfree_rcu(gw_node, rcu);
 }
 
-static struct batadv_gw_node *
+struct batadv_gw_node *
 batadv_gw_get_selected_gw_node(struct batadv_priv *bat_priv)
 {
 	struct batadv_gw_node *gw_node;
@@ -503,6 +506,59 @@ out:
 	if (primary_if)
 		batadv_hardif_free_ref(primary_if);
 	return 0;
+}
+
+/**
+ * batadv_gw_dump - Dump gateways into a message
+ * @msg: Netlink message to dump into
+ * @cb: Control block containing additional options
+ *
+ * Return: Error code, or length of message
+ */
+int batadv_gw_dump(struct sk_buff *msg, struct netlink_callback *cb)
+{
+	struct batadv_hard_iface *primary_if = NULL;
+	struct net *net = sock_net(cb->skb->sk);
+	struct net_device *soft_iface;
+	struct batadv_priv *bat_priv;
+	int ifindex;
+	int ret;
+
+	ifindex = batadv_netlink_get_ifindex(cb->nlh,
+					     BATADV_ATTR_MESH_IFINDEX);
+	if (!ifindex)
+		return -EINVAL;
+
+	soft_iface = dev_get_by_index(net, ifindex);
+	if (!soft_iface || !batadv_softif_is_valid(soft_iface)) {
+		ret = -ENODEV;
+		goto out;
+	}
+
+	bat_priv = netdev_priv(soft_iface);
+
+	primary_if = batadv_primary_if_get_selected(bat_priv);
+	if (!primary_if || primary_if->if_status != BATADV_IF_ACTIVE) {
+		ret = -ENOENT;
+		goto out;
+	}
+
+	if (!bat_priv->bat_algo_ops->bat_gw_dump) {
+		ret = -EOPNOTSUPP;
+		goto out;
+	}
+
+	bat_priv->bat_algo_ops->bat_gw_dump(msg, cb, bat_priv);
+
+	ret = msg->len;
+
+out:
+	if (primary_if)
+		batadv_hardif_free_ref(primary_if);
+	if (soft_iface)
+		dev_put(soft_iface);
+
+	return ret;
 }
 
 /* this call might reallocate skb data */

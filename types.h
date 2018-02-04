@@ -951,6 +951,8 @@ struct batadv_vis_if_list_entry {
  * @bat_primary_iface_set: called when primary interface is selected / changed
  * @bat_ogm_schedule: prepare a new outgoing OGM for the send queue
  * @bat_ogm_emit: send scheduled OGM
+ * @bat_orig_dump: dump originators to a netlink socket (optional)
+ * @bat_gw_dump: dump gateways to a netlink socket (optional)
  */
 struct batadv_algo_ops {
 	struct hlist_node list;
@@ -961,6 +963,12 @@ struct batadv_algo_ops {
 	void (*bat_primary_iface_set)(struct batadv_hard_iface *hard_iface);
 	void (*bat_ogm_schedule)(struct batadv_hard_iface *hard_iface);
 	void (*bat_ogm_emit)(struct batadv_forw_packet *forw_packet);
+
+	void (*bat_orig_dump)(struct sk_buff *msg, struct netlink_callback *cb,
+			      struct batadv_priv *priv,
+			      struct batadv_hard_iface *hard_iface);
+	void (*bat_gw_dump)(struct sk_buff *msg, struct netlink_callback *cb,
+			    struct batadv_priv *priv);
 };
 
 /**
@@ -993,6 +1001,19 @@ struct batadv_dat_entry {
 struct batadv_dat_candidate {
 	int type;
 	struct batadv_orig_node *orig_node;
+};
+
+/**
+ * struct batadv_store_mesh_work - Work queue item to detach add/del interface
+ *  from sysfs locks
+ * @net_dev: netdevice to add/remove to/from batman-adv soft-interface
+ * @soft_iface_name: name of soft-interface to modify
+ * @work: work queue item
+ */
+struct batadv_store_mesh_work {
+	struct net_device *net_dev;
+	char soft_iface_name[IFNAMSIZ];
+	struct work_struct work;
 };
 
 #endif /* _NET_BATMAN_ADV_TYPES_H_ */
