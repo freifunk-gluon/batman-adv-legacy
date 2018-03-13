@@ -218,6 +218,13 @@ static inline void batadv_eth_hw_addr_random(struct net_device *dev)
 	} while (0)
 #endif /* ifndef net_ratelimited_function */
 
+static inline int nla_put_be32(struct sk_buff *skb, int attrtype, __be32 value)
+{
+	__be32 tmp = value;
+
+	return nla_put(skb, attrtype, sizeof(__be32), &tmp);
+}
+
 #endif /* < KERNEL_VERSION(3, 5, 0) */
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 7, 0)
@@ -485,6 +492,14 @@ static inline bool seq_has_overflowed(struct seq_file *m)
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 1, 0)
 
 #define dev_get_iflink(_net_dev) ((_net_dev)->iflink)
+
+static inline int nla_put_in_addr(struct sk_buff *skb, int attrtype,
+				  __be32 addr)
+{
+	__be32 tmp = addr;
+
+	return nla_put_be32(skb, attrtype, tmp);
+}
 
 #endif /* < KERNEL_VERSION(4, 1, 0) */
 

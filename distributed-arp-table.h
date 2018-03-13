@@ -27,6 +27,8 @@
 
 #include <linux/if_arp.h>
 
+struct netlink_callback;
+
 #define BATADV_DAT_ADDR_MAX ((batadv_dat_addr_t)~(batadv_dat_addr_t)0)
 
 bool batadv_dat_snoop_outgoing_arp_request(struct batadv_priv *bat_priv,
@@ -73,6 +75,7 @@ batadv_dat_init_own_addr(struct batadv_priv *bat_priv,
 int batadv_dat_init(struct batadv_priv *bat_priv);
 void batadv_dat_free(struct batadv_priv *bat_priv);
 int batadv_dat_cache_seq_print_text(struct seq_file *seq, void *offset);
+int batadv_dat_cache_dump(struct sk_buff *msg, struct netlink_callback *cb);
 
 /**
  * batadv_dat_inc_counter - increment the correct DAT packet counter
@@ -155,6 +158,12 @@ static inline int batadv_dat_init(struct batadv_priv *bat_priv)
 
 static inline void batadv_dat_free(struct batadv_priv *bat_priv)
 {
+}
+
+static inline int
+batadv_dat_cache_dump(struct sk_buff *msg, struct netlink_callback *cb)
+{
+	return -EOPNOTSUPP;
 }
 
 static inline void batadv_dat_inc_counter(struct batadv_priv *bat_priv,
