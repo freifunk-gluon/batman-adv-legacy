@@ -305,23 +305,14 @@ end:
 
 void batadv_interface_rx(struct net_device *soft_iface,
 			 struct sk_buff *skb, struct batadv_hard_iface *recv_if,
-			 int hdr_size, struct batadv_orig_node *orig_node)
+			 bool is_bcast, struct batadv_orig_node *orig_node)
 {
 	struct batadv_priv *bat_priv = netdev_priv(soft_iface);
 	struct ethhdr *ethhdr;
 	struct vlan_ethhdr *vhdr;
-	struct batadv_header *batadv_header = (struct batadv_header *)skb->data;
 	unsigned short vid __maybe_unused = BATADV_NO_FLAGS;
 	__be16 ethertype = __constant_htons(ETH_P_BATMAN);
-	bool is_bcast;
 
-	is_bcast = (batadv_header->packet_type == BATADV_BCAST);
-
-	/* check if enough space is available for pulling, and pull */
-	if (!pskb_may_pull(skb, hdr_size))
-		goto dropped;
-
-	skb_pull_rcsum(skb, hdr_size);
 	skb_reset_mac_header(skb);
 
 	/* clean the netfilter state now that the batman-adv header has been

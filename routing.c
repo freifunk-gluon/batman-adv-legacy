@@ -921,15 +921,15 @@ static int batadv_check_unicast_ttvn(struct batadv_priv *bat_priv,
 	int is_old_ttvn;
 
 	/* check if there is enough data before accessing it */
-	if (pskb_may_pull(skb, hdr_len + ETH_HLEN) < 0)
+	if (pskb_may_pull(skb, ETH_HLEN) < 0)
 		return 0;
 
 	/* create a copy of the skb (in case of for re-routing) to modify it. */
-	if (skb_cow(skb, sizeof(*unicast_packet)) < 0)
+	if (skb_cow_head(skb, ETH_HLEN + hdr_len) < 0)
 		return 0;
 
-	unicast_packet = (struct batadv_unicast_packet *)skb->data;
-	ethhdr = (struct ethhdr *)(skb->data + hdr_len);
+	unicast_packet = (struct batadv_unicast_packet *)(skb->data - hdr_len);
+	ethhdr = (struct ethhdr *)skb->data;
 
 	/* check if the destination client was served by this node and it is now
 	 * roaming. In this case, it means that the node has got a ROAM_ADV
@@ -1040,33 +1040,35 @@ int batadv_recv_unicast_packet(struct sk_buff *skb,
 	 */
 	if (check == -EREMOTE)
 		batadv_nc_skb_store_sniffed_unicast(bat_priv, skb);
-
 	if (check < 0)
 		return NET_RX_DROP;
+
+	/* batadv_check_unicast_packet has checked if we may pull */
+	skb_pull_rcsum(skb, hdr_size);
+
 	if (!batadv_check_unicast_ttvn(bat_priv, skb, hdr_size))
 		return NET_RX_DROP;
 
-	unicast_packet = (struct batadv_unicast_packet *)skb->data;
+	unicast_packet = (struct batadv_unicast_packet *)(skb->data - hdr_size);
 
 	/* packet for me */
 	if (batadv_is_my_mac(bat_priv, unicast_packet->dest)) {
 		if (is4addr) {
 			unicast_4addr_packet =
-				(struct batadv_unicast_4addr_packet *)skb->data;
+				(struct batadv_unicast_4addr_packet *)
+				unicast_packet;
 			batadv_dat_inc_counter(bat_priv,
 					       unicast_4addr_packet->subtype);
 			orig_addr = unicast_4addr_packet->src;
 			orig_node = batadv_orig_hash_find(bat_priv, orig_addr);
 		}
 
-		if (batadv_dat_snoop_incoming_arp_request(bat_priv, skb,
-							  hdr_size))
+		if (batadv_dat_snoop_incoming_arp_request(bat_priv, skb, 0))
 			goto rx_success;
-		if (batadv_dat_snoop_incoming_arp_reply(bat_priv, skb,
-							hdr_size))
+		if (batadv_dat_snoop_incoming_arp_reply(bat_priv, skb, 0))
 			goto rx_success;
 
-		batadv_interface_rx(recv_if->soft_iface, skb, recv_if, hdr_size,
+		batadv_interface_rx(recv_if->soft_iface, skb, recv_if, false,
 				    orig_node);
 
 rx_success:
@@ -1075,6 +1077,8 @@ rx_success:
 
 		return NET_RX_SUCCESS;
 	}
+
+	skb_push_rcsum(skb, hdr_size);
 
 	return batadv_route_unicast_packet(skb, recv_if);
 }
@@ -1091,9 +1095,14 @@ int batadv_recv_ucast_frag_packet(struct sk_buff *skb,
 	if (batadv_check_unicast_packet(bat_priv, skb, hdr_size) < 0)
 		return NET_RX_DROP;
 
+	/* batadv_check_unicast_packet has checked if we may pull */
+	skb->ip_summed = CHECKSUM_NONE;
+	skb_pull(skb, hdr_size);
+
 	if (!batadv_check_unicast_ttvn(bat_priv, skb, hdr_size))
 		return NET_RX_DROP;
 
+	skb_push(skb, hdr_size);
 	unicast_packet = (struct batadv_unicast_frag_packet *)skb->data;
 
 	/* packet for me */
@@ -1107,15 +1116,15 @@ int batadv_recv_ucast_frag_packet(struct sk_buff *skb,
 		if (!new_skb)
 			return NET_RX_SUCCESS;
 
-		if (batadv_dat_snoop_incoming_arp_request(bat_priv, new_skb,
-							  hdr_size))
+		skb_pull(new_skb, sizeof(struct batadv_unicast_packet));
+
+		if (batadv_dat_snoop_incoming_arp_request(bat_priv, new_skb, 0))
 			goto rx_success;
-		if (batadv_dat_snoop_incoming_arp_reply(bat_priv, new_skb,
-							hdr_size))
+		if (batadv_dat_snoop_incoming_arp_reply(bat_priv, new_skb, 0))
 			goto rx_success;
 
 		batadv_interface_rx(recv_if->soft_iface, new_skb, recv_if,
-				    sizeof(struct batadv_unicast_packet), NULL);
+				    false, NULL);
 
 rx_success:
 		return NET_RX_SUCCESS;
@@ -1208,9 +1217,10 @@ int batadv_recv_bcast_packet(struct sk_buff *skb,
 	if (batadv_dat_snoop_incoming_arp_reply(bat_priv, skb, hdr_size))
 		goto rx_success;
 
+	skb_pull_rcsum(skb, hdr_size);
+
 	/* broadcast for me */
-	batadv_interface_rx(recv_if->soft_iface, skb, recv_if, hdr_size,
-			    orig_node);
+	batadv_interface_rx(recv_if->soft_iface, skb, recv_if, true, orig_node);
 
 rx_success:
 	ret = NET_RX_SUCCESS;
