@@ -1676,6 +1676,9 @@ static void batadv_iv_gw_dump(struct sk_buff *msg, struct netlink_callback *cb,
 		if (idx++ < idx_skip)
 			continue;
 
+		if (gw_node->deleted)
+			continue;
+
 		if (batadv_iv_gw_dump_entry(msg, portid, cb->nlh->nlmsg_seq,
 					    bat_priv, gw_node)) {
 			idx_skip = idx - 1;

@@ -490,15 +490,20 @@ static inline bool seq_has_overflowed(struct seq_file *m)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(3, 9, 0)
 
-#define netdev_master_upper_dev_link(dev, upper_dev, upper_priv, upper_info) \
+#define netdev_master_upper_dev_link(dev, upper_dev, upper_priv, upper_info, extack) \
 	netdev_set_master(dev, upper_dev)
 
 #elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 5, 0)
 
-#define netdev_master_upper_dev_link(dev, upper_dev, upper_priv, upper_info) \
+#define netdev_master_upper_dev_link(dev, upper_dev, upper_priv, upper_info, extack) \
 	netdev_master_upper_dev_link(dev, upper_dev)
 
-#endif /* < KERNEL_VERSION(4, 5, 0) */
+#elif LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+
+#define netdev_master_upper_dev_link(dev, upper_dev, upper_priv, upper_info, extack) \
+	netdev_master_upper_dev_link(dev, upper_dev, upper_priv, upper_info)
+
+#endif /* < KERNEL_VERSION(4, 15, 0) */
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 10, 0)
 
@@ -538,5 +543,12 @@ static inline void batadv_netif_trans_update(struct net_device *dev)
 #define priv_destructor destructor = batadv_softif_free2; t1
 
 #endif /* < KERNEL_VERSION(4, 12, 0) */
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 15, 0)
+
+#define batadv_softif_slave_add(__dev, __slave_dev, __extack) \
+	batadv_softif_slave_add(__dev, __slave_dev)
+
+#endif /* < KERNEL_VERSION(4, 15, 0) */
 
 #endif /* _NET_BATMAN_ADV_COMPAT_H_ */
