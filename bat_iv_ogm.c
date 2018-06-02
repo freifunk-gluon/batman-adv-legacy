@@ -1603,7 +1603,7 @@ static int batadv_iv_gw_dump_entry(struct sk_buff *msg, u32 portid, u32 seq,
 				   struct batadv_gw_node *gw_node)
 {
 	struct batadv_neigh_node *router;
-	struct batadv_gw_node *curr_gw;
+	struct batadv_gw_node *curr_gw = NULL;
 	int ret = -EINVAL;
 	int down, up;
 	void *hdr;
@@ -1648,6 +1648,8 @@ static int batadv_iv_gw_dump_entry(struct sk_buff *msg, u32 portid, u32 seq,
 	ret = 0;
 
 out:
+	if (curr_gw)
+		batadv_gw_node_free_ref(curr_gw);
 	if (router)
 		batadv_neigh_node_free_ref(router);
 	return ret;
