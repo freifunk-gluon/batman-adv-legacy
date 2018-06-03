@@ -36,6 +36,7 @@ int batadv_gw_client_seq_print_text(struct seq_file *seq, void *offset);
 int batadv_gw_dump(struct sk_buff *msg, struct netlink_callback *cb);
 bool batadv_gw_is_dhcp_target(struct sk_buff *skb, unsigned int *header_len);
 bool batadv_gw_out_of_range(struct batadv_priv *bat_priv, struct sk_buff *skb);
+void batadv_gw_node_free_ref(struct batadv_gw_node *gw_node);
 struct batadv_gw_node *
 batadv_gw_get_selected_gw_node(struct batadv_priv *bat_priv);
 

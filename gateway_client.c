@@ -39,7 +39,7 @@
 #define BATADV_DHCP_OPTIONS_OFFSET 240
 #define BATADV_DHCP_REQUEST 3
 
-static void batadv_gw_node_free_ref(struct batadv_gw_node *gw_node)
+void batadv_gw_node_free_ref(struct batadv_gw_node *gw_node)
 {
 	if (atomic_dec_and_test(&gw_node->refcount))
 		kfree_rcu(gw_node, rcu);
