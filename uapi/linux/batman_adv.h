@@ -18,7 +18,7 @@
 #ifndef _UAPI_LINUX_BATMAN_ADV_H_
 #define _UAPI_LINUX_BATMAN_ADV_H_
 
-#define BATADV_NL_NAME "batadv"
+#define BATADV_NL_NAME "batadv_legacy"
 
 #define BATADV_NL_MCAST_GROUP_TPMETER	"tpmeter"
 
