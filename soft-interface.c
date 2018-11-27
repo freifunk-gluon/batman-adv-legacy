@@ -681,7 +681,7 @@ int batadv_softif_is_valid(const struct net_device *net_dev)
 }
 
 struct rtnl_link_ops batadv_link_ops __read_mostly = {
-	.kind		= "batadv",
+	.kind		= "batadv-legacy",
 	.priv_size	= sizeof(struct batadv_priv),
 	.setup		= batadv_softif_init_early,
 	.dellink	= batadv_softif_destroy_netlink,
