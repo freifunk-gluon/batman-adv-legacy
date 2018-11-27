@@ -21,7 +21,7 @@
 #define _NET_BATMAN_ADV_SYSFS_H_
 
 #define BATADV_SYSFS_IF_MESH_SUBDIR "mesh"
-#define BATADV_SYSFS_IF_BAT_SUBDIR "batman_adv"
+#define BATADV_SYSFS_IF_BAT_SUBDIR "batman_adv_legacy"
 
 struct batadv_attribute {
 	struct attribute attr;
