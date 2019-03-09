@@ -566,4 +566,22 @@ static inline void batadv_netif_trans_update(struct net_device *dev)
 
 #endif /* < KERNEL_VERSION(4, 15, 0) */
 
+#include <linux/uaccess.h>
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 0, 0)
+
+static inline int batadv_access_ok(int type, const void __user *p,
+				   unsigned long size)
+{
+	return access_ok(type, p, size);
+}
+
+#ifdef access_ok
+#undef access_ok
+#endif
+
+#define access_ok(addr, size)	batadv_access_ok(VERIFY_WRITE, (addr), (size))
+
+#endif /* < KERNEL_VERSION(5, 0, 0) */
+
 #endif /* _NET_BATMAN_ADV_COMPAT_H_ */
