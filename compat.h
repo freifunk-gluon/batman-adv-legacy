@@ -709,4 +709,10 @@ batadv_genl_unregister_family(struct batadv_genl_family *family)
 
 #endif /* < KERNEL_VERSION(5, 2, 0) */
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(5, 4, 0)
+
+#define nf_reset_ct nf_reset
+
+#endif /* < KERNEL_VERSION(5, 4, 0) */
+
 #endif /* _NET_BATMAN_ADV_COMPAT_H_ */
