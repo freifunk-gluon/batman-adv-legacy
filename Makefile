@@ -35,25 +35,46 @@ ifeq ($(shell cd $(KERNELPATH) && pwd),)
 $(warning $(KERNELPATH) is missing, please set KERNELPATH)
 endif
 
+OBJCOPY ?= objcopy
+OBJDUMP ?= objdump
+
 export KERNELPATH
 RM ?= rm -f
+RMDIR ?= rm -rf
 
 REVISION= $(shell	if [ -d "$(PWD)/.git" ]; then \
 				echo $$(git --git-dir="$(PWD)/.git" describe --always --dirty --match "v*" |sed 's/^v//' 2> /dev/null || echo "[unknown]"); \
 			fi)
 
 CONFIG_BATMAN_ADV=m
-batman-adv-y += compat.o
+batman-adv-legacy-y += compat.o
 ifneq ($(REVISION),)
 ccflags-y += -DBATADV_SOURCE_VERSION=\"$(REVISION)\"
 endif
 include $(PWD)/Makefile.kbuild
 
-all: config
-	$(MAKE) -C $(KERNELPATH) M=$(PWD) PWD=$(PWD) modules
+all: batman-adv-legacy.ko
+
+build:
+	mkdir -p "$@"
+
+build/Makefile: build
+	touch "$@"
+
+build/batman-adv-legacy.ko: config build/Makefile
+	$(MAKE) -C $(KERNELPATH) M=$(PWD)/build PWD=$(PWD) src=$(PWD) modules
+
+build/updated-syms.txt: build/batman-adv-legacy.ko
+	$(OBJDUMP) -t $(PWD)/build/batman-adv-legacy.ko | grep batadv_ | \
+		sed "s/.* \([^ ]*\)batadv_\([^ ]*\)$$/\1batadv_\2 \1batadv_legacy_\2/" | \
+			sort | uniq > $(PWD)/build/updated-syms.txt
+
+batman-adv-legacy.ko: build/batman-adv-legacy.ko build/updated-syms.txt
+	$(OBJCOPY) --redefine-syms=$(PWD)/build/updated-syms.txt $(PWD)/build/batman-adv-legacy.ko $(PWD)/batman-adv-legacy.ko
 
 clean:
 	$(RM) compat-autoconf.h*
+	$(RMDIR) build
 	$(MAKE) -C $(KERNELPATH) M=$(PWD) PWD=$(PWD) clean
 
 install: config
